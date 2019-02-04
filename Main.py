@@ -6,5 +6,7 @@ import time
 import sys
 
 screen = pygame.display.set_mode([1200 , 800])
-pygame.mouse.set_visible(False)
 font = pygame.font.SysFont("comicsansms", 20)
+pygame.mouse.set_visible(False)
+
+dirtImage = pygame.image.load("DirtImage.png")
