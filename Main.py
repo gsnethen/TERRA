@@ -5,9 +5,6 @@ import random
 import time
 import sys
 import WorldGeneration
-import DrawImage
-import TileImage
-import Player
 
 screen = pygame.display.set_mode([1200 , 800])
 font = pygame.font.SysFont("comicsansms", 20)
@@ -18,22 +15,38 @@ world = WorldGeneration.generateWorld()
 playerPos = [1200, 800]
 cameraOffset = [622.5, 422.5]
 
+tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
+              "TILE_DIRT" : pygame.image.load("DirtImage.png"),
+              "TILE_STONE" : pygame.image.load("StoneImage.png")}
+
 while True:
     tickTime = time.time()
     
-    DrawImage.fillDisplay([0, 0, 0], screen)
+    screen.fill([0, 0, 0])
     
-    for y in range(len(world)):
-        for x in range(len(world[y])):
-            DrawImage.blitImage(TileImage.getImage(world[y][x][0]), [x * 45, y * 45], cameraOffset, screen)
+    for row in world:
+        for tile in row:
+            screen.blit(tileImages[tile[0]], [(tile[1][0] * 45) - cameraOffset[0], (tile[1][1] * 45) - cameraOffset[1]])
 
-    Player.drawPlayer(playerPos, cameraOffset, screen)
+    screen.blit(pygame.image.load("PlayerImage.png"), [playerPos[0] - cameraOffset[0], playerPos[1] - cameraOffset[1]])
 
-    DrawImage.drawDisplay()
+    pygame.display.flip()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
 
-    Player.movePlayer(playerPos, cameraOffset, 1)
+    keys = pygame.key.get_pressed()
+    if keys[K_d]:
+        playerPos[0] += 135 * (time.time() - tickTime)
+        cameraOffset[0] += 135 * (time.time() - tickTime)
+    if keys[K_a]:
+        playerPos[0] -= 135 * (time.time() - tickTime)
+        cameraOffset[0] -= 135 * (time.time() - tickTime)
+    if keys[K_w]:
+        playerPos[1] -= 135 * (time.time() - tickTime)
+        cameraOffset[1] -= 135 * (time.time() - tickTime)
+    if keys[K_s]:
+        playerPos[1] += 135 * (time.time() - tickTime)
+        cameraOffset[1] += 135 * (time.time() - tickTime)
