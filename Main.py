@@ -5,6 +5,7 @@ import random
 import time
 import sys
 import WorldGeneration
+import DrawImage
 
 screen = pygame.display.set_mode([1200 , 800])
 font = pygame.font.SysFont("comicsansms", 20)
