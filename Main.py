@@ -7,7 +7,7 @@ import sys
 import WorldGeneration
 
 screen = pygame.display.set_mode([1200 , 800])
-font = pygame.font.SysFont("comicsansms", 20)
+font = pygame.font.SysFont("comicsansms", 15)
 pygame.mouse.set_visible(False)
 
 world = WorldGeneration.generateWorld()
@@ -15,6 +15,9 @@ world = WorldGeneration.generateWorld()
 playerPos = [0, 0]
 cameraOffset = [-622.5, -422.5]
 playerVel = [0, 0]
+
+items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0}
+selection = "ITEM_DIRT"
 
 tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
               "TILE_DIRT" : pygame.image.load("DirtImage.png"),
@@ -31,6 +34,13 @@ while True:
 
     screen.blit(pygame.image.load("PlayerImage.png"), [playerPos[0] - cameraOffset[0], playerPos[1] - cameraOffset[1]])
 
+    screen.blit(pygame.image.load("DirtSlot.png"), [0, 0])
+    screen.blit(pygame.image.load("StoneSlot.png"), [0, 45])
+    text = font.render(str(items["ITEM_DIRT"]), True, [0, 0, 0], [255, 255, 255])
+    screen.blit(text, [0, 0])
+    text = font.render(str(items["ITEM_STONE"]), True, [0, 0, 0], [255, 255, 255])
+    screen.blit(text, [0, 45])
+    
     pygame.draw.circle(screen, [255, 0, 0], [round(pygame.mouse.get_pos()[0] + 22.5), round(pygame.mouse.get_pos()[1] + 22.5)], 15)
 
     pygame.display.flip()
@@ -80,6 +90,21 @@ while True:
 
     mousePos = [round((pygame.mouse.get_pos()[0] + cameraOffset[0]) / 45) * 45, round((pygame.mouse.get_pos()[1] + cameraOffset[1]) / 45) * 45]
 
+    if pygame.mouse.get_pressed()[1]:
+        mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
+        for row in range(len(world)):
+            for tile in range(len(world[row])):
+                if mousePos == world[row][tile][1]:
+                    if world[row][tile][0] == "TILE_AIR":
+                        if items[selection] >= 1:
+                            if selection = "ITEM_DIRT":
+                                items[selection] -= 1
+                                world[row][tile] = ["TILE_DIRT", world[row][tile][1], 0.5, 0.5]
+                            if selection = "ITEM_STONE":
+                                items[selection] -= 1
+                                world[row][tile] = ["TILE_STONE", world[row][tile][1], 1, 1]
+                        
+
     if pygame.mouse.get_pressed()[0]:
         mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
         for row in range(len(world)):
@@ -91,6 +116,8 @@ while True:
                             world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
                         elif world[row][tile][0] == "TILE_DIRT":
                             world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                            items["ITEM_DIRT"] += 1
                         elif world[row][tile][0] == "TILE_STONE":
                             world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                            items["ITEM_STONE"] += 1
 
