@@ -31,6 +31,8 @@ while True:
 
     screen.blit(pygame.image.load("PlayerImage.png"), [playerPos[0] - cameraOffset[0], playerPos[1] - cameraOffset[1]])
 
+    pygame.draw.circle(screen, [255, 0, 0], [round(pygame.mouse.get_pos()[0] + 22.5), round(pygame.mouse.get_pos()[1] + 22.5)], 15)
+
     pygame.display.flip()
 
     for event in pygame.event.get():
@@ -75,4 +77,20 @@ while True:
         playerVel[1] -= 665
         
     playerVel[1] += 665 * tickTime
-        
+
+    mousePos = [round((pygame.mouse.get_pos()[0] + cameraOffset[0]) / 45) * 45, round((pygame.mouse.get_pos()[1] + cameraOffset[1]) / 45) * 45]
+
+    if pygame.mouse.get_pressed()[0]:
+        mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
+        for row in range(len(world)):
+            for tile in range(len(world[row])):
+                if mousePos == world[row][tile][1]:
+                    world[row][tile][2] -= tickTime
+                    if world[row][tile][2] < 0:
+                        if world[row][tile][0] == "TILE_AIR":
+                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                        elif world[row][tile][0] == "TILE_DIRT":
+                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                        elif world[row][tile][0] == "TILE_STONE":
+                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+
