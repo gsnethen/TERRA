@@ -75,7 +75,10 @@ while True:
                     if Rect(playerPos[0], playerPos[1], 45, 45).colliderect(Rect(tile[1][0] * 45, tile[1][1] * 45, 45, 45)):
                         playerPos[1] -= playerVel[1] * tickTime
                         cameraOffset[1] -= playerVel[1] * tickTime
-                        playerVel[1] = 0
+                        if playerVel[1] > 0:
+                            playerVel[1] = 0
+                        else:
+                            playerVel[1] = -1
                         
     if keys[K_d]:
         playerVel[0] += 665 * tickTime
@@ -85,22 +88,28 @@ while True:
 
     if keys[K_SPACE] and playerVel[1] == 0:
         playerVel[1] -= 665
+
+    if keys[K_1]:
+        selection = "ITEM_DIRT"
+
+    if keys[K_2]:
+        selection = "ITEM_STONE"
         
     playerVel[1] += 665 * tickTime
 
     mousePos = [round((pygame.mouse.get_pos()[0] + cameraOffset[0]) / 45) * 45, round((pygame.mouse.get_pos()[1] + cameraOffset[1]) / 45) * 45]
 
-    if pygame.mouse.get_pressed()[1]:
+    if pygame.mouse.get_pressed()[2]:
         mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
         for row in range(len(world)):
             for tile in range(len(world[row])):
                 if mousePos == world[row][tile][1]:
                     if world[row][tile][0] == "TILE_AIR":
                         if items[selection] >= 1:
-                            if selection = "ITEM_DIRT":
+                            if selection == "ITEM_DIRT":
                                 items[selection] -= 1
                                 world[row][tile] = ["TILE_DIRT", world[row][tile][1], 0.5, 0.5]
-                            if selection = "ITEM_STONE":
+                            if selection == "ITEM_STONE":
                                 items[selection] -= 1
                                 world[row][tile] = ["TILE_STONE", world[row][tile][1], 1, 1]
                         
