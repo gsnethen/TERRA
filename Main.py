@@ -10,13 +10,19 @@ screen = pygame.display.set_mode([1200 , 800])
 font = pygame.font.SysFont("comicsansms", 15)
 pygame.mouse.set_visible(False)
 
+dev = True
+
 world = WorldGeneration.generateWorld()
 
 playerPos = [0, 0]
 cameraOffset = [-622.5, -422.5]
 playerVel = [0, 0]
 
-items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0}
+if dev:
+    items = {"ITEM_DIRT" : (10 ** 100), "ITEM_STONE" : (10 ** 100)}
+else:
+    items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0}
+    
 selection = "ITEM_DIRT"
 
 tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
@@ -86,8 +92,9 @@ while True:
     if keys[K_a]:
         playerVel[0] -= 665 * tickTime
 
-    if keys[K_SPACE] and playerVel[1] == 0:
-        playerVel[1] -= 665
+    if keys[K_SPACE]:
+        if playerVel[1] == 0:
+            playerVel[1] -= 665
 
     if keys[K_1]:
         selection = "ITEM_DIRT"
