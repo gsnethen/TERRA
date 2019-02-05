@@ -97,6 +97,12 @@ while True:
         
     playerVel[1] += 665 * tickTime
 
+    for row in range(len(world)):
+        for tile in range(len(world[row])):
+            world[row][tile][2] += 0.05 * tickTime
+            if world[row][tile][2] > world[row][tile][3]:
+                world[row][tile][2] = world[row][tile][3]
+
     mousePos = [round((pygame.mouse.get_pos()[0] + cameraOffset[0]) / 45) * 45, round((pygame.mouse.get_pos()[1] + cameraOffset[1]) / 45) * 45]
 
     if pygame.mouse.get_pressed()[2]:
