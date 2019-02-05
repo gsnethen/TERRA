@@ -16,7 +16,7 @@ playerPos = [0, 0]
 cameraOffset = [-622.5, -422.5]
 playerVel = [0, 0]
 
-items = {"ITEM_DIRT" : 110, "ITEM_STONE" : 110, "ITEM_WOOD" : 110, "ITEM_LEAF" : 110}
+items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0, "ITEM_WOOD" : 0, "ITEM_LEAF" : 0}
     
 selection = "ITEM_DIRT"
 
