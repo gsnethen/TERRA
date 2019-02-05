@@ -10,8 +10,6 @@ screen = pygame.display.set_mode([1200 , 800])
 font = pygame.font.SysFont("comicsansms", 15)
 pygame.mouse.set_visible(False)
 
-dev = True
-
 world = WorldGeneration.generateWorld()
 
 playerPos = [0, 0]
@@ -81,15 +79,15 @@ while True:
     playerPos[1] += playerVel[1] * tickTime
     cameraOffset[1] += playerVel[1] * tickTime
     for row in world:
-            for tile in row:
-                if tile[0] != "TILE_AIR":
-                    if Rect(playerPos[0], playerPos[1], 45, 45).colliderect(Rect(tile[1][0] * 45, tile[1][1] * 45, 45, 45)):
-                        playerPos[1] -= playerVel[1] * tickTime
-                        cameraOffset[1] -= playerVel[1] * tickTime
-                        if playerVel[1] > 0:
-                            playerVel[1] = 0
-                        else:
-                            playerVel[1] = -1
+        for tile in row:
+            if tile[0] != "TILE_AIR":
+                if Rect(playerPos[0], playerPos[1], 45, 45).colliderect(Rect(tile[1][0] * 45, tile[1][1] * 45, 45, 45)):
+                    playerPos[1] -= playerVel[1] * tickTime
+                    cameraOffset[1] -= playerVel[1] * tickTime
+                    if playerVel[1] > 0:
+                        playerVel[1] = 0
+                    else:
+                        playerVel[1] = -1
                         
     if keys[K_d]:
         playerVel[0] += 665 * tickTime
