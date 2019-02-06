@@ -6,7 +6,7 @@ import time
 import sys
 import WorldGeneration
 
-screen = pygame.display.set_mode([1200 , 800])
+screen = pygame.display.set_mode([1200 , 800], pygame.FULLSCREEN)
 font = pygame.font.SysFont("comicsansms", 15)
 pygame.mouse.set_visible(False)
 
@@ -133,6 +133,10 @@ while True:
         
     if keys[K_5]:
         selection = "ITEM_PLANK"
+
+    if keys[K_ESCAPE]:
+        pygame.quit()
+        sys.exit()
         
     playerVel[1] += 665 * tickTime
 
