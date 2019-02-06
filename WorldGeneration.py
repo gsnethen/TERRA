@@ -13,7 +13,7 @@ def generateWorld():
                 row.append(["TILE_STONE", [x, y], 2.5, 2.5])
         world.append(row)
 
-    for n in range(random.randint(6, 15)):
+    for n in range(random.randint(8, 15)):
         y = 19
         x = random.randint(1, 160)
         for row in range(len(world)):

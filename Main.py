@@ -23,6 +23,8 @@ items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0, "ITEM_WOOD" : 0, "ITEM_LEAF" : 0, "I
     
 selection = "ITEM_DIRT"
 
+upgrade = 0
+
 tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
               "TILE_DIRT" : pygame.image.load("DirtImage.png"),
               "TILE_STONE" : pygame.image.load("StoneImage.png"),
@@ -59,6 +61,12 @@ while True:
     screen.blit(text, [0, 180])
     #text = font.render(str(items["ITEM_LEAF"]), True, [0, 0, 0], [255, 255, 255])
     #screen.blit(text, [0, 135])
+    if upgrade == 0:
+        screen.blit(pygame.image.load("EmptySlot.png"), [0, 225])
+    if upgrade == 1:
+        screen.blit(pygame.image.load("Level1Slot.png"), [0, 225])
+    if upgrade == 2:
+        screen.blit(pygame.image.load("Level2Slot.png"), [0, 225])
     
     pygame.draw.circle(screen, [255, 0, 0], [round(pygame.mouse.get_pos()[0] + 22.5), round(pygame.mouse.get_pos()[1] + 22.5)], 15)
 
@@ -73,7 +81,9 @@ while True:
 
     tickTime = time.time() - tickTime
 
-    playerVel[0] -= (playerVel[0] * 3) * tickTime
+    if not keys[K_SPACE]:
+        playerVel[0] -= (playerVel[0] * 3) * tickTime
+
     playerVel[1] += 665 * tickTime
 
     playerPos[0] += playerVel[0] * tickTime
@@ -162,12 +172,29 @@ while True:
             if items["ITEM_WOOD"] >= 1:
                 items["ITEM_WOOD"] -= 1
                 items["ITEM_PLANK"] += 5
+
+        elif pygame.mouse.get_pos()[0] <= 45 and pygame.mouse.get_pos()[0] >= 0 and pygame.mouse.get_pos()[1] >= 225 and pygame.mouse.get_pos()[1] <= 270:
+            if items["ITEM_WOOD"] >= 2 and items["ITEM_PLANK"] >= 8 and upgrade == 0:
+                items["ITEM_WOOD"] -= 2
+                items["ITEM_PLANK"] -= 8
+                upgrade = 1
+
+            if items["ITEM_WOOD"] >= 4 and items["ITEM_STONE"] >= 8 and upgrade == 1:
+                items["ITEM_WOOD"] -= 4
+                items["ITEM_STONE"] -= 8
+                upgrade = 2
+                
         else:
             mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
             for row in range(len(world)):
                 for tile in range(len(world[row])):
                     if mousePos == world[row][tile][1]:
-                        world[row][tile][2] -= tickTime
+                        if upgrade == 0:
+                            world[row][tile][2] -= tickTime * 0.2
+                        if upgrade == 1:
+                            world[row][tile][2] -= tickTime
+                        if upgrade == 2:
+                            world[row][tile][2] -= tickTime * 2.25
                         if world[row][tile][2] < 0:
                             if world[row][tile][0] == "TILE_AIR":
                                 world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
