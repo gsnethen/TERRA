@@ -16,7 +16,7 @@ playerPos = [0, 0]
 cameraOffset = [-622.5, -422.5]
 playerVel = [0, 0]
 
-items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0, "ITEM_WOOD" : 0, "ITEM_LEAF" : 0}
+items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0, "ITEM_WOOD" : 0, "ITEM_LEAF" : 0, "ITEM_PLANK" : 0}
     
 selection = "ITEM_DIRT"
 
@@ -24,7 +24,8 @@ tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
               "TILE_DIRT" : pygame.image.load("DirtImage.png"),
               "TILE_STONE" : pygame.image.load("StoneImage.png"),
               "TILE_WOOD" : pygame.image.load("WoodImage.png"),
-              "TILE_LEAF" : pygame.image.load("LeafImage.png")}
+              "TILE_LEAF" : pygame.image.load("LeafImage.png"),
+              "TILE_PLANK" : pygame.image.load("PlankImage.png")}
 
 while True:
     tickTime = time.time()
@@ -49,6 +50,12 @@ while True:
     screen.blit(text, [0, 90])
     text = font.render(str(items["ITEM_LEAF"]), True, [0, 0, 0], [255, 255, 255])
     screen.blit(text, [0, 135])
+    screen.blit(pygame.image.load("PlankSlot.png"), [0, 180])
+    #screen.blit(pygame.image.load("LeafSlot.png"), [0, 135])
+    text = font.render(str(items["ITEM_PLANK"]), True, [0, 0, 0], [255, 255, 255])
+    screen.blit(text, [0, 180])
+    #text = font.render(str(items["ITEM_LEAF"]), True, [0, 0, 0], [255, 255, 255])
+    #screen.blit(text, [0, 135])
     
     pygame.draw.circle(screen, [255, 0, 0], [round(pygame.mouse.get_pos()[0] + 22.5), round(pygame.mouse.get_pos()[1] + 22.5)], 15)
 
@@ -111,6 +118,9 @@ while True:
     if keys[K_4]:
         selection = "ITEM_LEAF"
         
+    if keys[K_5]:
+        selection = "ITEM_PLANK"
+        
     playerVel[1] += 665 * tickTime
 
     for row in range(len(world)):
@@ -136,30 +146,40 @@ while True:
                                 world[row][tile] = ["TILE_STONE", world[row][tile][1], 2.5, 2.5]
                             if selection == "ITEM_WOOD":
                                 items[selection] -= 1
-                                world[row][tile] = ["TILE_WOOD", world[row][tile][1], 1.5, 1.5]
+                                world[row][tile] = ["TILE_WOOD", world[row][tile][1], 2, 2]
                             if selection == "ITEM_LEAF":
                                 items[selection] -= 1
                                 world[row][tile] = ["TILE_LEAF", world[row][tile][1], 0.25, 0.25]
+                            if selection == "ITEM_PLANK":
+                                items[selection] -= 1
+                                world[row][tile] = ["TILE_PLANK", world[row][tile][1], 1.5, 1.5]
 
     if pygame.mouse.get_pressed()[0]:
-        mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
-        for row in range(len(world)):
-            for tile in range(len(world[row])):
-                if mousePos == world[row][tile][1]:
-                    world[row][tile][2] -= tickTime
-                    if world[row][tile][2] < 0:
-                        if world[row][tile][0] == "TILE_AIR":
-                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
-                        elif world[row][tile][0] == "TILE_DIRT":
-                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
-                            items["ITEM_DIRT"] += 1
-                        elif world[row][tile][0] == "TILE_STONE":
-                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
-                            items["ITEM_STONE"] += 1
-                        elif world[row][tile][0] == "TILE_WOOD":
-                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
-                            items["ITEM_WOOD"] += 1
-                        elif world[row][tile][0] == "TILE_LEAF":
-                            world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
-                            items["ITEM_LEAF"] += 1
-
+        if pygame.mouse.get_pos()[0] <= 45 and pygame.mouse.get_pos()[0] >= 0 and pygame.mouse.get_pos()[1] >= 180 and pygame.mouse.get_pos()[1] <= 225:
+            if items["ITEM_WOOD"] >= 1:
+                items["ITEM_WOOD"] -= 1
+                items["ITEM_PLANK"] += 5
+        else:
+            mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
+            for row in range(len(world)):
+                for tile in range(len(world[row])):
+                    if mousePos == world[row][tile][1]:
+                        world[row][tile][2] -= tickTime
+                        if world[row][tile][2] < 0:
+                            if world[row][tile][0] == "TILE_AIR":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                            elif world[row][tile][0] == "TILE_DIRT":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                                items["ITEM_DIRT"] += 1
+                            elif world[row][tile][0] == "TILE_STONE":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                                items["ITEM_STONE"] += 1
+                            elif world[row][tile][0] == "TILE_WOOD":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                                items["ITEM_WOOD"] += 1
+                            elif world[row][tile][0] == "TILE_LEAF":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                                items["ITEM_LEAF"] += 1
+                            elif world[row][tile][0] == "TILE_PLANK":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                                items["ITEM_PLANK"] += 1
