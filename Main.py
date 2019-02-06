@@ -16,6 +16,9 @@ playerPos = [0, 0]
 cameraOffset = [-622.5, -422.5]
 playerVel = [0, 0]
 
+season = 1
+day = 1
+
 items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0, "ITEM_WOOD" : 0, "ITEM_LEAF" : 0, "ITEM_PLANK" : 0}
     
 selection = "ITEM_DIRT"
@@ -183,3 +186,41 @@ while True:
                             elif world[row][tile][0] == "TILE_PLANK":
                                 world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
                                 items["ITEM_PLANK"] += 1
+
+    day += tickTime * 0.1
+    if day >= 30:
+        day = 1
+        season += 1
+        if season == 5:
+            season = 1
+        if season == 1:
+            tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
+                          "TILE_DIRT" : pygame.image.load("DirtImage.png"),
+                          "TILE_STONE" : pygame.image.load("StoneImage.png"),
+                          "TILE_WOOD" : pygame.image.load("WoodImage.png"),
+                          "TILE_LEAF" : pygame.image.load("LeafImage.png"),
+                          "TILE_PLANK" : pygame.image.load("PlankImage.png")}
+
+        if season == 2:
+            tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
+                          "TILE_DIRT" : pygame.image.load("DirtImage.png"),
+                          "TILE_STONE" : pygame.image.load("StoneImage.png"),
+                          "TILE_WOOD" : pygame.image.load("WoodImage.png"),
+                          "TILE_LEAF" : pygame.image.load("SummerImage.png"),
+                          "TILE_PLANK" : pygame.image.load("PlankImage.png")}
+
+        if season == 3:
+            tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
+                          "TILE_DIRT" : pygame.image.load("DirtImage.png"),
+                          "TILE_STONE" : pygame.image.load("StoneImage.png"),
+                          "TILE_WOOD" : pygame.image.load("WoodImage.png"),
+                          "TILE_LEAF" : pygame.image.load("FallImage.png"),
+                          "TILE_PLANK" : pygame.image.load("PlankImage.png")}
+
+        if season == 4:
+            tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
+                          "TILE_DIRT" : pygame.image.load("DirtImage.png"),
+                          "TILE_STONE" : pygame.image.load("StoneImage.png"),
+                          "TILE_WOOD" : pygame.image.load("WoodImage.png"),
+                          "TILE_LEAF" : pygame.image.load("WinterImage.png"),
+                          "TILE_PLANK" : pygame.image.load("PlankImage.png")}
