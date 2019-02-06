@@ -10,8 +10,8 @@ def generateWorld():
             if y >= 20 and y < 40:
                 row.append(["TILE_DIRT", [x, y], 1, 1])
             if y >= 40:
-                if random.randint(1, 35) == 1:
-                    if random.randint(1, 5) == 1:
+                if random.randint(1, 24) == 1:
+                    if random.randint(1, 4) == 1:
                         row.append(["TILE_IRON", [x, y], 5, 5])
                     else:
                         row.append(["TILE_COPPER", [x, y], 3.5, 3.5])
