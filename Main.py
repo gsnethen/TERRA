@@ -19,7 +19,7 @@ playerVel = [0, 0]
 season = 1
 day = 1
 
-items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0, "ITEM_WOOD" : 0, "ITEM_LEAF" : 0, "ITEM_PLANK" : 0}
+items = {"ITEM_DIRT" : 0, "ITEM_STONE" : 0, "ITEM_WOOD" : 0, "ITEM_LEAF" : 0, "ITEM_PLANK" : 0, "ITEM_COPPER" : 0, "ITEM_IRON" : 0}
     
 selection = "ITEM_DIRT"
 
@@ -30,7 +30,9 @@ tileImages = {"TILE_AIR" : pygame.image.load("AirImage.png"),
               "TILE_STONE" : pygame.image.load("StoneImage.png"),
               "TILE_WOOD" : pygame.image.load("WoodImage.png"),
               "TILE_LEAF" : pygame.image.load("LeafImage.png"),
-              "TILE_PLANK" : pygame.image.load("PlankImage.png")}
+              "TILE_PLANK" : pygame.image.load("PlankImage.png"),
+              "TILE_COPPER" : pygame.image.load("CopperImage.png"),
+              "TILE_IRON" : pygame.image.load("IronImage.png")}
 
 while True:
     tickTime = time.time()
@@ -67,6 +69,16 @@ while True:
         screen.blit(pygame.image.load("Level1Slot.png"), [0, 225])
     if upgrade == 2:
         screen.blit(pygame.image.load("Level2Slot.png"), [0, 225])
+    if upgrade == 3:
+        screen.blit(pygame.image.load("Level3Slot.png"), [0, 225])
+    if upgrade == 4:
+        screen.blit(pygame.image.load("Level4Slot.png"), [0, 225])
+    screen.blit(pygame.image.load("CopperSlot.png"), [0, 270])
+    screen.blit(pygame.image.load("IronSlot.png"), [0, 315])
+    text = font.render(str(items["ITEM_COPPER"]), True, [0, 0, 0], [255, 255, 255])
+    screen.blit(text, [0, 270])
+    text = font.render(str(items["ITEM_IRON"]), True, [0, 0, 0], [255, 255, 255])
+    screen.blit(text, [0, 315])
     
     pygame.draw.circle(screen, [255, 0, 0], [round(pygame.mouse.get_pos()[0] + 22.5), round(pygame.mouse.get_pos()[1] + 22.5)], 15)
 
@@ -134,6 +146,12 @@ while True:
     if keys[K_5]:
         selection = "ITEM_PLANK"
 
+    if keys[K_6]:
+        selection = "ITEM_COPPER"
+        
+    if keys[K_7]:
+        selection = "ITEM_IRON"
+
     if keys[K_ESCAPE]:
         pygame.quit()
         sys.exit()
@@ -170,7 +188,13 @@ while True:
                             if selection == "ITEM_PLANK":
                                 items[selection] -= 1
                                 world[row][tile] = ["TILE_PLANK", world[row][tile][1], 1.5, 1.5]
-
+                            if selection == "ITEM_COPPER":
+                                items[selection] -= 1
+                                world[row][tile] = ["TILE_COPPER", world[row][tile][1], 3.5, 3.5]
+                            if selection == "ITEM_IRON":
+                                items[selection] -= 1
+                                world[row][tile] = ["TILE_IRON", world[row][tile][1], 5, 5]
+                                
     if pygame.mouse.get_pressed()[0]:
         if pygame.mouse.get_pos()[0] <= 45 and pygame.mouse.get_pos()[0] >= 0 and pygame.mouse.get_pos()[1] >= 180 and pygame.mouse.get_pos()[1] <= 225:
             if items["ITEM_WOOD"] >= 1:
@@ -187,6 +211,16 @@ while True:
                 items["ITEM_WOOD"] -= 4
                 items["ITEM_STONE"] -= 8
                 upgrade = 2
+
+            if items["ITEM_WOOD"] >= 4 and items["ITEM_COPPER"] >= 6 and upgrade == 2:
+                items["ITEM_WOOD"] -= 4
+                items["ITEM_COPPER"] -= 6
+                upgrade = 3
+
+            if items["ITEM_WOOD"] >= 6 and items["ITEM_IRON"] >= 6 and upgrade == 3:
+                items["ITEM_WOOD"] -= 6
+                items["ITEM_IRON"] -= 6
+                upgrade = 4
                 
         else:
             mousePos = [int((mousePos[0]) / 45), int((mousePos[1]) / 45)]
@@ -199,6 +233,10 @@ while True:
                             world[row][tile][2] -= tickTime
                         if upgrade == 2:
                             world[row][tile][2] -= tickTime * 2.25
+                        if upgrade == 3:
+                            world[row][tile][2] -= tickTime * 4
+                        if upgrade == 4:
+                            world[row][tile][2] -= tickTime * 9.5
                         if world[row][tile][2] < 0:
                             if world[row][tile][0] == "TILE_AIR":
                                 world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
@@ -217,6 +255,12 @@ while True:
                             elif world[row][tile][0] == "TILE_PLANK":
                                 world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
                                 items["ITEM_PLANK"] += 1
+                            elif world[row][tile][0] == "TILE_COPPER":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                                items["ITEM_COPPER"] += 1
+                            elif world[row][tile][0] == "TILE_IRON":
+                                world[row][tile] = ["TILE_AIR", world[row][tile][1], 0, 0]
+                                items["ITEM_IRON"] += 1
 
     day += tickTime * 0.1
     if day >= 30:
